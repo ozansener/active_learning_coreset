@@ -5,7 +5,7 @@ import time
 import pickle
 import bisect
 
-dat = pickle.load(open('chosen_data_5000_False'))
+dat = pickle.load(open('feature_vectors_pickled'))
 data = numpy.concatenate((dat['gt_f'],dat['f']), axis=0)
 budget = 5000
 
@@ -20,6 +20,6 @@ dist_mat+=sq
 dist_mat+=sq.transpose()
 
 elapsed = time.clock() - start
-print "Time spent in (function name) is: ", elapsed
+print "Time spent in (distance computation) is: ", elapsed
 numpy.save('distances.npy', dist_mat)
 
