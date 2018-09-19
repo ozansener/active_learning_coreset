@@ -62,28 +62,24 @@ def solve_fac_loc(xx,yy,subset,n,budget):
     return model
 
 
-dat = pickle.load(open('chosen_100_data_49871_True'))
-data = numpy.concatenate((dat['a'][0],dat['a'][3]), axis=0)
-#data = numpy.loadtxt('ss.txt').astype(numpy.float32) 
+data = pickle.load(open('feature_vectors_pickled'))
 budget = 10000
 
 start = time.clock()
 num_images = data.shape[0]
-print "s"
 dist_mat = numpy.matmul(data,data.transpose())
 
-print "m"
 sq = numpy.array(dist_mat.diagonal()).reshape(num_images,1)
 dist_mat *= -2
 dist_mat+=sq
 dist_mat+=sq.transpose()
 
 elapsed = time.clock() - start
-print "Time spent in (function name) is: ", elapsed
+print "Time spent in (distance computation) is: ", elapsed
 
 num_images = 50000
 
-# We need to get k centers start with greed
+# We need to get k centers start with greedy solution
 budget = 10000
 subset = [i for i in range(1)]
  
@@ -100,7 +96,6 @@ x,y,z = model.__data
 delta=1e-7
 while ub-lb>delta:
     print "State",ub,lb
-    #pdb.set_trace()
     cur_r = (ub+lb)/2.0
     viol = numpy.where(_d>cur_r)
     new_max_d = numpy.min(_d[_d>=cur_r])
