@@ -15,7 +15,7 @@ Source code for ICLR 2018 Paper: Active Learning for Convolutional Neural Networ
 ## Greedy Solver
 - If you only need a greedy solver, you can use https://github.com/google/active-learning/blob/master/sampling_methods/kcenter_greedy.py
 
-  ## Reference
+## Reference
 
 If you find the code useful, please cite the following papers:
 
