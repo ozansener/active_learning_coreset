@@ -9,33 +9,17 @@ import time
 import pickle
 import bisect
 
-dat = pickle.load(open('chosen_data_5000_False'))
-data = numpy.concatenate((dat['gt_f'],dat['f']), axis=0)
+gurobi_solution_file = 'solution_2.86083525164.sol'
+results = open(gurobi_solution_file).read().split('\n')
+results_nodes = filter(lambda x: 'y' in x,filter(lambda x:'#' not in x, results))
+string_to_id = lambda x:(int(x.split(' ')[0].split('_')[1]),int(x.split(' ')[1]))
+result_node_ids = map(string_to_id, results_nodes)
 
-start = time.clock()
-num_images = data.shape[0]
-print "s"
-dist_mat = numpy.matmul(data,data.transpose())
+results_as_dict = {v[0]:v[1] for v in result_node_ids}
 
-print "m"
-sq = numpy.array(dist_mat.diagonal()).reshape(num_images,1)
-dist_mat *= -2
-dist_mat+=sq
-dist_mat+=sq.transpose()
+centers = []
+for node_result in result_node_ids:
+    if node_result[1] > 0:
+        centers.append(node_result[0])
 
-res = open('ssolution_2.86083525164.sol').read().split('\n')
-y_res = filter(lambda x: 'y' in x,filter(lambda x:'#' not in x, res))
-f = lambda x:(int(x.split(' ')[0].split('_')[1]),int(x.split(' ')[1]))
-_c = map(f,y_res)
-dic = {c[0]:c[1] for c in _c}
-cent = []
-for c in _c:
-    if c[1] > 0:
-        cent.append(c[0])
-
-lab = numpy.argmin(dist_mat[cent,:], axis=0)
-pickle.dump(lab,open('labels.bn','wb'))
-
-lab_v = numpy.min(dist_mat[cent,:], axis=0)
-pickle.dump(lab_v,open('labels_values.bn','wb'))
-
+pickle.dump(centers,open('centers.bn','wb'))
